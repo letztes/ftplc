@@ -87,7 +87,6 @@ if ($save) {
 	$timestamp = $save;
 	copy($timestamp.'_webcam.jpg', 'save/'.$timestamp.'_webcam.jpg');
 	copy($timestamp.'_screenshot.jpg', 'save/'.$timestamp.'_screenshot.jpg');
-	copy($timestamp.'_screenshot-thumb.jpg', 'save/'.$timestamp.'_screenshot-thumb.jpg');
 }
 
 

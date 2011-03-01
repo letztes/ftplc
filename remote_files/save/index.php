@@ -62,14 +62,7 @@ if ($delete) {
     $timestamp = $delete;
 	unlink($timestamp.'_webcam.jpg');
 	unlink($timestamp.'_screenshot.jpg');
-	unlink($timestamp.'_screenshot-thumb.jpg');
 	print '<h1>Diese Seite wurde gel&ouml;scht.</h1>';
-}
-if ($save) {
-	$timestamp = $save;
-	copy($timestamp.'_webcam.jpg', 'save/'.$timestamp.'_webcam.jpg');
-	copy($timestamp.'_screenshot.jpg', 'save/'.$timestamp.'_screenshot.jpg');
-	copy($timestamp.'_screenshot-thumb.jpg', 'save/'.$timestamp.'_screenshot-thumb.jpg');
 }
 if ($timestamp) {
     print 'Seite '.$current_page_number.' von '.(count($timestamps)).'<br/>';

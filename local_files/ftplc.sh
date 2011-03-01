@@ -19,7 +19,7 @@ ISP_INFO=$(whois $OWN_IP | grep 'country:\|address:' | sed 's/^address: //' | so
 
 touch $IMAGES_DIRECTORY/success.txt
 while true; do
-    DATETIMESTRING=$(date +"%Y.%m.%dT%H:%M")
+    DATETIMESTRING=$(date +"%Y-%m-%dT%H:%M")
     WEBCAM_FILENAME=$IMAGES_DIRECTORY/${DATETIMESTRING}_webcam.jpg
     SCREENSHOT_FILENAME=$IMAGES_DIRECTORY/${DATETIMESTRING}_screenshot.jpg
 
