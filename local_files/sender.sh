@@ -4,10 +4,10 @@ IMAGES_DIRECTORY=$2
 
 FTPSERVER='' # put your ftp server name here
 USERNAME='' # put the user name of your ftp server here
-PASSWORD='' # put the password the user of your ftp server here
+PASSWORD='' # put the password for the user of your ftp server here here
 
 if [ $# -lt 2 ]; then
-    echo "not enough parameters, shame on you!"
+    echo "not enough parameters. DATETIMESTRING and IMAGES_DIRECTORY needed."
     exit
 fi
 rm $IMAGES_DIRECTORY/success.txt
