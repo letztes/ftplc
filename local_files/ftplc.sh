@@ -1,25 +1,22 @@
 #!/bin/bash
 
-# in ubuntu 10.10 maverick it seems not to work to take screenshots from
-# cron: the script is then unable to open display from X server
-# so the script runs as automatic started programs in X-session
-
 #TODO
-# * determine filename of recent subdir
- 
-SCRIPTS_DIRECTORY=$(pwd)
+# * config file that contains
+#   * FTPSERVER
+#   * USERNAME
+#   * PASSWORD
+
+# caveat, sh doesn't know dirname. bash does
+SCRIPTS_DIRECTORY=$(dirname $0) 
+source $SCRIPTS_DIRECTORY/ftplc.cfg
+
 IMAGES_DIRECTORY=$SCRIPTS_DIRECTORY/images
 
 MINUTES=0 # Counts how long the script is running
-CAPTUREINTERVAL=60 #here # Default 60. Value in seconds. Don't change it until the let MINUTES++ statement is not set into appropriate condition
-UPLOADINTERVAL=5 #here # Default 5. Value in minutes
 
 FILES_IN_SUBDIRECTORY=0 #Counts how many pictures are in a the current dir
-MAX_FILES_IN_SUBDIRECTORY=100 #here # Default 100
-SUBDIR=0 # Name of subdirectory
+SUBDIR=0 # Name of subdirectory, consists of continuosly incremented digits
 
-# better not testing for a subdirectory called "0", but for any file that
-# is a directory. 
 SUBDIRS=($(ls -tdr $IMAGES_DIRECTORY/*/ 2> /dev/null))
 if [ ${#SUBDIRS[@]} -gt 0 ]; then
     # last element in subdirs array
@@ -37,8 +34,8 @@ fi
 mkdir $IMAGES_DIRECTORY/$SUBDIR
 CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
 
-# In case the network is not yet up, sleep a little. Default 30.
-sleep 30 #here
+
+sleep $SECONDS_TO_WAIT_FOR_NETWORK #here
 # get IP and ISP info once per session
 OWN_IP=$(wget -q http://www.whatismyip.com/automation/n09230945.asp -O -);
 ISP_INFO=$(whois $OWN_IP | grep 'country:\|address:' | sed 's/^address: //' | sort -u);

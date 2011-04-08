@@ -1,16 +1,15 @@
 #!/bin/bash
 DATETIMESTRING=$1
-IMAGES_DIRECTORY=$2
+CURRENT_IMAGES_DIRECTORY=$2
 
-FTPSERVER='' # put your ftp server name here
-USERNAME='' # put the user name of your ftp server here
-PASSWORD='' # put the password for the user of your ftp server here here
+SCRIPTS_DIRECTORY=$(dirname $0) 
+source $SCRIPTS_DIRECTORY/ftplc.cfg
 
 if [ $# -lt 2 ]; then
-    echo "not enough parameters. DATETIMESTRING and IMAGES_DIRECTORY needed."
+    echo "not enough parameters. DATETIMESTRING and CURRENT_IMAGES_DIRECTORY needed."
     exit
 fi
-rm $IMAGES_DIRECTORY/success.txt
+rm $CURRENT_IMAGES_DIRECTORY/success.txt
 echo "    uploading files"
 
 ftp -n -i <<ENDOFINPUT
@@ -18,7 +17,7 @@ open $FTPSERVER
 user $USERNAME $PASSWORD
 cd webcam
 binary
-lcd $IMAGES_DIRECTORY
+lcd $CURRENT_IMAGES_DIRECTORY
 put $DATETIMESTRING"_screenshot.jpg"
 put $DATETIMESTRING"_webcam.jpg"
 get success.txt
