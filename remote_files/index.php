@@ -36,7 +36,9 @@ print '
         <script type = "text/javascript">
             function checkAll() {
                 if(document.forms[0].masterbox.checked==true){
-                    for(var i=0; i< document.forms[0].elements["timestamps_to_delete[]"].length; i++) {
+                    last_index = document.forms[0].elements["timestamps_to_delete[]"].length;
+                    if (last_index > 20) {last_index = 20;}
+                    for(var i=0; i< last_index; i++) {
                         document.forms[0].elements["timestamps_to_delete[]"][i].checked=true;
                         
                     }
