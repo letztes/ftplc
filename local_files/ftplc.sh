@@ -23,7 +23,7 @@ CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
 ############################################################################
 
 sleep $SECONDS_TO_WAIT_FOR_NETWORK
-OWN_IP=$(wget -q http://www.whatismyip.com/automation/n09230945.asp -O -);
+OWN_IP=$(wget -q http://sedetiam.de/ip/ -O -);
 ISP_INFO=$(whois $OWN_IP | grep 'country:\|address:' | sed 's/^address: //' | sort -u);
 
 
