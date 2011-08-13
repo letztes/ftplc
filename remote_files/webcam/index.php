@@ -12,16 +12,16 @@
 # Set Variables
 ##############################################################################
 
-$current_page_number = 'unknown'; # convenient displaying of pagenumber
+$current_page_number    = 'unknown'; # convenient displaying of pagenumber
 
-$timestamp = $_GET['timestamp'];
-$save = $_GET['save'];
-$delete = $_GET['delete'];
-$timestamps_to_delete = $_GET['timestamps_to_delete'];
+$timestamp              = $_GET['timestamp'];
+$save                   = $_GET['save'];
+$delete                 = $_GET['delete'];
+$timestamps_to_delete   = $_GET['timestamps_to_delete'];
 
-$timestamps = array();
+$timestamps             = array();
 
-$timestamps = get_timestamps(); # selfmade function, see below
+$timestamps             = get_timestamps(); # selfmade function, see below
 
 
 

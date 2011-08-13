@@ -6,11 +6,8 @@
 SCRIPTS_DIRECTORY=$(dirname $0) 
 source $SCRIPTS_DIRECTORY/ftplc.cfg
 
-IMAGES_DIRECTORY=$SCRIPTS_DIRECTORY/images
-
 MINUTES=0 # Counts how long the script is running
 
-FILES_IN_SUBDIRECTORY=0 #Counts how many pictures are in a the current dir
 SUBDIR=$(date +"%Y-%m-%dT%H:%M")
 mkdir $IMAGES_DIRECTORY/$SUBDIR
 CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
@@ -22,7 +19,9 @@ CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
 #
 ############################################################################
 
+# Sometimes the network is not up immediately. Wait a little.
 sleep $SECONDS_TO_WAIT_FOR_NETWORK
+
 OWN_IP=$(wget -q http://sedetiam.de/ip/ -O -);
 ISP_INFO=$(whois $OWN_IP | grep 'country:\|address:' | sed 's/^address: //' | sort -u);
 
@@ -56,11 +55,12 @@ while true; do
 
     echo "   taking webcam image..."
     ffmpeg -f video4linux2 -s 1280x800 -r 1 -i /dev/video0 -vframes 1 -f image2 $WEBCAM_FILENAME 2> /dev/null
-    timestamp=$(date); convert $WEBCAM_FILENAME -fill white -undercolor '#00000080' -gravity NorthEast -annotate +5+5 "$timestamp\nCurrent IP: $OWN_IP\n\nISP INFO:\n$ISP_INFO" $WEBCAM_FILENAME
     if [ -e $WEBCAM_FILENAME ]; then
-        let FILES_IN_SUBDIRECTORY++
+        timestamp=$(date); convert $WEBCAM_FILENAME -fill white -undercolor '#00000080' -gravity NorthEast -annotate +5+5 "$timestamp\nCurrent IP: $OWN_IP\n\nISP INFO:\n$ISP_INFO" $WEBCAM_FILENAME
+        echo "   done."
+    else
+        echo "   not possible."
     fi
-    echo "   done."
     
     
     ########################################################################
@@ -71,12 +71,13 @@ while true; do
 
     echo "   taking screenshot image..."
     import -display :0.0 -window root /tmp/screenshot.jpg
+    # import cannot use variables as file arguments
     mv /tmp/screenshot.jpg $SCREENSHOT_FILENAME
-    #import -display :0.0 -window root $SCREENSHOT_FILENAME
     if [ -e $SCREENSHOT_FILENAME ]; then
-        let FILES_IN_SUBDIRECTORY++
+        echo "   done."
+    else
+        echo "   not possible."
     fi
-    echo "   done."
     
     ########################################################################
     #
@@ -88,19 +89,27 @@ while true; do
         if test -f $CURRENT_IMAGES_DIRECTORY/success.txt; then
             $SCRIPTS_DIRECTORY/sender.sh $DATETIMESTRING $CURRENT_IMAGES_DIRECTORY &
         fi
-    fi
-   
-   
+    fi   
+    
+    
     ########################################################################
     #
-    # Make a new current local directory if the other is too full already
+    # Upload and remove all images via allsender.pl if
+    # there is more than a certain amount of images
+    #
+    # Look up the amount in certain intervals
     #
     ########################################################################
 
-    if [ $FILES_IN_SUBDIRECTORY -gt $MAX_FILES_IN_SUBDIRECTORY ]; then
-        SUBDIR=$(date +"%Y-%m-%dT%H:%M")
-        mkdir $IMAGES_DIRECTORY/$SUBDIR
-        let FILES_IN_SUBDIRECTORY=0
+        
+    if [ $(ls -R $IMAGES_DIRECTORY | grep jpg | wc -l) -gt $MAX_FILES_AT_ALL ]; then
+        if [ -f $CURRENT_IMAGES_DIRECTORY/success.txt ]; then
+            CURRENT_SUBDIRECTORIES=$(ls $IMAGES_DIRECTORY)
+            perl $SCRIPTS_DIRECTORY/allsender.pl $CURRENT_SUBDIRECTORIES
+            SUBDIR=$(date +"%Y-%m-%dT%H:%M")
+            mkdir $IMAGES_DIRECTORY/$SUBDIR
+            CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
+        fi
     fi
    
    sleep $CAPTUREINTERVAL

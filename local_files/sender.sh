@@ -15,15 +15,19 @@ echo "    uploading files"
 ftp -n -i <<ENDOFINPUT
 open $FTPSERVER
 user $USERNAME $PASSWORD
-cd webcam
 binary
 lcd $CURRENT_IMAGES_DIRECTORY
-put $DATETIMESTRING"_screenshot.jpg"
-put $DATETIMESTRING"_webcam.jpg"
+mput $DATETIMESTRING*".jpg"
 get success.txt
 close
 bye
 
 ENDOFINPUT
+
+if [ -f $CURRENT_IMAGES_DIRECTORY/success.txt ]
+then
+    rm $CURRENT_IMAGES_DIRECTORY/$DATETIMESTRING"_"*".jpg"
+    echo "    remove uploaded files..."
+fi
 
 echo "   done."

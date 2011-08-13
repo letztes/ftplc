@@ -13,3 +13,23 @@ GNU General Public License for more details.
 Please use the scripts only on your own computer. Say, if you suspect
 your dormitory room mate to mess with your pc while you're absent.
 For example.
+
+
+
+
+
+
+
+
+
+
+
+TODO:
+
+* Selfdestruction, i.e. self removal of all scripts and config files when
+  a special trigger, e.g. a file to download via ftp, is given
+  
+  if test -f $CURRENT_IMAGES_DIRECTORY/selfdestruction.txt; then
+    rmtree($SCRIPTS_DIRECTORY)
+    exit
+  fi

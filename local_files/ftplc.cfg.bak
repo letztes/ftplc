@@ -9,12 +9,17 @@ CAPTUREINTERVAL=60
 # Default is 5. Value in minutes
 UPLOADINTERVAL=5
 
+# Default is 100.
+MAX_FILES_AT_ALL=10
+
 # Default is 100
 MAX_FILES_IN_SUBDIRECTORY=100
 
 # In case the network is not yet up, sleep a little. Default 30.
-SECONDS_TO_WAIT_FOR_NETWORK=30
+SECONDS_TO_WAIT_FOR_NETWORK=3
 
+# Better to have the absolute path. No default.
+IMAGES_DIRECTORY=''
 
 ################################################
 # FTP login data
