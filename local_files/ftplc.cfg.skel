@@ -1,0 +1,35 @@
+################################################
+# Configuration for the capturing
+################################################
+
+# Default should be 60. Value in seconds. Don't change it until
+# the let MINUTES++ statement is not set into appropriate condition
+CAPTUREINTERVAL=60
+
+# Default is 5. Value in minutes
+UPLOADINTERVAL=5
+
+# Default is 100.
+MAX_FILES_AT_ALL=100
+
+# Default is 100
+MAX_FILES_IN_SUBDIRECTORY=100
+
+# In case the network is not yet up, sleep a little. Default 30.
+SECONDS_TO_WAIT_FOR_NETWORK=30
+
+# Better to have the absolute path. No default.
+IMAGES_DIRECTORY=''
+
+################################################
+# FTP login data
+################################################
+
+# put your ftp server name here
+FTPSERVER='' 
+
+# put the user name of your ftp server here
+USERNAME=''
+
+# put the password for the user of your ftp server here here
+PASSWORD=''

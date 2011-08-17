@@ -97,8 +97,6 @@ while true; do
     # Upload and remove all images via allsender.pl if
     # there is more than a certain amount of images
     #
-    # Look up the amount in certain intervals
-    #
     ########################################################################
 
         
