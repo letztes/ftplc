@@ -7,21 +7,23 @@
 # Navigating through images and saving an image is done with link-buttons.
 ##############################################################################
 
+touch('success.txt');
+
 
 ##############################################################################
 # Set Variables
 ##############################################################################
 
-$current_page_number    = 'unknown'; # convenient displaying of pagenumber
+$current_page_number = 'unknown'; # convenient displaying of pagenumber
 
-$timestamp              = $_GET['timestamp'];
-$save                   = $_GET['save'];
-$delete                 = $_GET['delete'];
-$timestamps_to_delete   = $_GET['timestamps_to_delete'];
+$timestamp = $_GET['timestamp'];
+$save = $_GET['save'];
+$delete = $_GET['delete'];
+$timestamps_to_delete = $_GET['timestamps_to_delete'];
 
-$timestamps             = array();
+$timestamps = array();
 
-$timestamps             = get_timestamps(); # selfmade function, see below
+$timestamps = get_timestamps(); # selfmade function, see below
 
 
 
@@ -78,6 +80,8 @@ if ($delete) {
         <h1>Fertig. Alle ausgew&auml;hlten Bilder gel&ouml;scht.</h1>
     ';
     $timestamps = get_timestamps(); # selfmade function, see below
+    
+    print "<a href='index.php'><input value='Zur&uuml;ck zur &Uuml;bersicht' type='button'></a> ";
 }
 
 

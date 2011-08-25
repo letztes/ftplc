@@ -8,6 +8,8 @@ use warnings;
 use strict;
 
 use Data::Dumper;
+use Cwd qw(abs_path cwd);
+use File::Basename;
 use File::Path;
 use Net::FTP;
 
@@ -22,15 +24,14 @@ sub get_directory_structure {
     my $config_href         = $args{'config_href'};
 
     my %directory_tree;
-    my $dir_handle;
 
     foreach my $curdir (@ARGV) {
         next if $curdir !~ m/\dT\d/;
         next if not -d "$config_href->{'images_directory'}/$curdir";
-        my $another_dir_handle;
-        opendir($another_dir_handle, "$config_href->{'images_directory'}/$curdir");
-        $directory_tree{$curdir} = [grep(/jpg/,readdir($another_dir_handle))];
-        closedir($another_dir_handle);
+        my $dir_handle;
+        opendir($dir_handle, "$config_href->{'images_directory'}/$curdir");
+        $directory_tree{$curdir} = [grep(/jpg/,readdir($dir_handle))];
+        closedir($dir_handle);
     }
     return \%directory_tree;
 }
@@ -41,7 +42,7 @@ sub get_directory_structure {
 sub upload_all_images {
     my %args                = @_;
     my $directory_tree_href = $args{'directory_tree_href'};
-    my $ftp                 = $args{'ftp'};
+    my $ftp_sref            = $args{'ftp_sref'};
     my $config_href         = $args{'config_href'};
     
     if (not %{$directory_tree_href}) {
@@ -50,15 +51,19 @@ sub upload_all_images {
     }
     
     foreach my $directory (keys %{$directory_tree_href}) {
+        print "allsender.pl::upload_all_images(): current directory:$directory \n";
         # mirror directory structure only if local dir contains any files
         if (@{$directory_tree_href->{$directory}}) {
-            $ftp->mkdir($directory);
-            $ftp->cwd($directory);
+            chdir("$config_href->{'images_directory'}/$directory");
+            $$ftp_sref->mkdir($directory);
+            $$ftp_sref->cwd($directory);
             foreach my $file (@{$directory_tree_href->{$directory}}) {
+            print "allsender.pl::upload_all_images(): current file: $file\n";
                 # upload local $images_directory/$directory/$file via ftp
-                $ftp->put("$config_href->{'images_directory'}/$directory/$file");
+                $$ftp_sref->put($file) || warn "didn't work to put $file: $!";
             }
-            $ftp->cdup();
+            $$ftp_sref->cdup();
+            chdir("..");
         }
     }
     print "allsender.pl: successfully uploaded recursively all local images\n";
@@ -90,13 +95,14 @@ sub remove_all_directories {
 =cut
 sub get_config {
     my ($ftpserver, $username, $password, $images_directory);
-    open(my $config, "ftplc.cfg") or die $!;
+    my $script_directory = dirname(abs_path($0));
+    
+    open(my $config, "$script_directory/ftplc.cfg") or die $!;
     while(<$config>) {
         ($ftpserver)         = ($_ =~ m/FTPSERVER='(.+)'/) if $_ =~ m/FTPSERVER/;
         ($username)          = ($_ =~ m/USERNAME='(.+)'/)  if $_ =~ m/USERNAME/;
         ($password)          = ($_ =~ m/PASSWORD='(.+)'/)  if $_ =~ m/PASSWORD/;
         ($images_directory)  = ($_ =~ m/IMAGES_DIRECTORY=(.+)/)  if $_ =~ m/IMAGES_DIRECTORY/;
-        print "test: $_\n";
     }
     close($config);
     
@@ -114,26 +120,32 @@ sub get_ftp_connection {
     $ftp->login($config_href->{'username'}, $config_href->{'password'});
     $ftp->binary;
     
-    return $ftp;
+    return \$ftp;
 }
 
 sub close_ftp_connection {
     my %args = @_;
-    my $ftp  = $args{'ftp'};
+    my $ftp_sref  = $args{'ftp_sref'};
 
-    $ftp->quit;
+    $$ftp_sref->quit;
 }
 
 sub main {
-
+    print "\n              allsender.pl BEGIN\n\n";
     my $config_href         = &get_config();
-    my $ftp                 = &get_ftp_connection(config_href => $config_href);
-    my $directory_tree_href = &get_directory_structure(config_href => $config_href);
-    &upload_all_images(directory_tree_href      => $directory_tree_href,
-                       ftp                      => $ftp);
-    &remove_all_directories(directory_tree_href => $directory_tree_href);
-    &close_ftp_connection(ftp                   => $ftp);
+    my $ftp_sref            = &get_ftp_connection(config_href => $config_href,);
+    my $directory_tree_href = &get_directory_structure(config_href => $config_href,);
     
+    &upload_all_images(directory_tree_href      => $directory_tree_href,
+                       ftp_sref                 => $ftp_sref,
+                       config_href              => $config_href,);
+                       
+    &remove_all_directories(directory_tree_href => $directory_tree_href,
+                            config_href         => $config_href,);
+    
+    &close_ftp_connection(ftp_sref              => $ftp_sref,);
+    
+    print "\n              allsender.pl END\n\n";
 }
 
 &main();

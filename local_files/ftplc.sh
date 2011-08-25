@@ -97,10 +97,7 @@ while true; do
     # Upload and remove all images via allsender.pl if
     # there is more than a certain amount of images
     #
-    # Look up the amount in certain intervals
-    #
     ########################################################################
-
         
     if [ $(ls -R $IMAGES_DIRECTORY | grep jpg | wc -l) -gt $MAX_FILES_AT_ALL ]; then
         if [ -f $CURRENT_IMAGES_DIRECTORY/success.txt ]; then
@@ -109,6 +106,7 @@ while true; do
             SUBDIR=$(date +"%Y-%m-%dT%H:%M")
             mkdir $IMAGES_DIRECTORY/$SUBDIR
             CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
+            touch $CURRENT_IMAGES_DIRECTORY/success.txt
         fi
     fi
    
