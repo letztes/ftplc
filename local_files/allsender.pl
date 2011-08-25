@@ -8,7 +8,7 @@ use warnings;
 use strict;
 
 use Data::Dumper;
-use Cwd 'abs_path';
+use Cwd qw(abs_path cwd);
 use File::Basename;
 use File::Path;
 use Net::FTP;
@@ -54,16 +54,16 @@ sub upload_all_images {
         print "allsender.pl::upload_all_images(): current directory:$directory \n";
         # mirror directory structure only if local dir contains any files
         if (@{$directory_tree_href->{$directory}}) {
-            $$ftp_sref->lcd($directory);
+            chdir("$config_href->{'images_directory'}/$directory");
             $$ftp_sref->mkdir($directory);
             $$ftp_sref->cwd($directory);
             foreach my $file (@{$directory_tree_href->{$directory}}) {
             print "allsender.pl::upload_all_images(): current file: $file\n";
                 # upload local $images_directory/$directory/$file via ftp
-                $$ftp_sref->put($file);
+                $$ftp_sref->put($file) || warn "didn't work to put $file: $!";
             }
             $$ftp_sref->cdup();
-            $$ftp_sref->lcd("..");
+            chdir("..");
         }
     }
     print "allsender.pl: successfully uploaded recursively all local images\n";
@@ -140,8 +140,8 @@ sub main {
                        ftp_sref                 => $ftp_sref,
                        config_href              => $config_href,);
                        
-#    &remove_all_directories(directory_tree_href => $directory_tree_href,
-#                            config_href         => $config_href,);
+    &remove_all_directories(directory_tree_href => $directory_tree_href,
+                            config_href         => $config_href,);
     
     &close_ftp_connection(ftp_sref              => $ftp_sref,);
     
