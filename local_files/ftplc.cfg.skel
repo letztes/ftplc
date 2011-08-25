@@ -18,8 +18,8 @@ MAX_FILES_IN_SUBDIRECTORY=100
 # In case the network is not yet up, sleep a little. Default 30.
 SECONDS_TO_WAIT_FOR_NETWORK=30
 
-# Better to have the absolute path. No default.
-IMAGES_DIRECTORY=''
+# Better to have the absolute path. No default. No quotes!
+IMAGES_DIRECTORY=
 
 ################################################
 # FTP login data

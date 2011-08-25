@@ -98,15 +98,17 @@ while true; do
     # there is more than a certain amount of images
     #
     ########################################################################
-
+            CURRENT_SUBDIRECTORIES=$(ls $IMAGES_DIRECTORY)
+            perl $SCRIPTS_DIRECTORY/allsender.pl $CURRENT_SUBDIRECTORIES 
         
     if [ $(ls -R $IMAGES_DIRECTORY | grep jpg | wc -l) -gt $MAX_FILES_AT_ALL ]; then
         if [ -f $CURRENT_IMAGES_DIRECTORY/success.txt ]; then
             CURRENT_SUBDIRECTORIES=$(ls $IMAGES_DIRECTORY)
-            perl $SCRIPTS_DIRECTORY/allsender.pl $CURRENT_SUBDIRECTORIES
+            perl $SCRIPTS_DIRECTORY/allsender.pl $CURRENT_SUBDIRECTORIES #TODO anscheinend wird die Liste nicht übergeben
             SUBDIR=$(date +"%Y-%m-%dT%H:%M")
             mkdir $IMAGES_DIRECTORY/$SUBDIR
             CURRENT_IMAGES_DIRECTORY=$IMAGES_DIRECTORY/$SUBDIR
+            touch $CURRENT_IMAGES_DIRECTORY/success.txt
         fi
     fi
    
