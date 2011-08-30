@@ -39,34 +39,52 @@ sub get_directory_structure {
 =head2
     Uploads the directories recursively.
 =cut
-sub upload_all_images {
+sub upload_and_remove_all_images {
     my %args                = @_;
     my $directory_tree_href = $args{'directory_tree_href'};
     my $ftp_sref            = $args{'ftp_sref'};
     my $config_href         = $args{'config_href'};
     
     if (not %{$directory_tree_href}) {
-        print "allsender.pl: no local files to upload\n";
+        print "        allsender.pl: no local files to upload\n";
         return;
     }
     
     foreach my $directory (keys %{$directory_tree_href}) {
-        print "allsender.pl::upload_all_images(): current directory:$directory \n";
+        print "   allsender.pl::upload_all_images(): directory:$directory \n";
         # mirror directory structure only if local dir contains any files
         if (@{$directory_tree_href->{$directory}}) {
             chdir("$config_href->{'images_directory'}/$directory");
             $$ftp_sref->mkdir($directory);
             $$ftp_sref->cwd($directory);
             foreach my $file (@{$directory_tree_href->{$directory}}) {
-            print "allsender.pl::upload_all_images(): current file: $file\n";
+            print "   allsender.pl::upload_all_images(): file: $file\n";
                 # upload local $images_directory/$directory/$file via ftp
-                $$ftp_sref->put($file) || warn "didn't work to put $file: $!";
+#                $$ftp_sref->put($file) || warn "didn't work to put $file: $!";
+                if ($$ftp_sref->put($file)) {
+                    print "        allsender.pl: successfully uploaded '$file'\n";
+                    if (unlink("$config_href->{'images_directory'}/$directory/$file")) {
+                        print "        allsender.pl: successfully deleted '$file'\n";
+                    }
+                    else {
+                        print "        allsender.pl: unable to delete '$file'\n";
+                    }
+                }
+                else {
+                    print "        allsender.pl: unable to put '$file': $!";
+                }
             }
             $$ftp_sref->cdup();
             chdir("..");
+                if (rmtree("$config_href->{'images_directory'}/$directory")) {
+                print "        allsender.pl: successfully deleted directory '$directory'\n";
+                print "\n";
+            }
+            else {
+                print "        allsender.pl: unable to delete directory '$directory'\n";
+            }
         }
     }
-    print "allsender.pl: successfully uploaded recursively all local images\n";
 }
 
 =head2
@@ -78,7 +96,7 @@ sub remove_all_directories {
     my $config_href         = $args{'config_href'};
     
     if (not %{$directory_tree_href}) {
-        print "allsender.pl: no local files to delete\n";
+        print "        allsender.pl: no local files to delete\n";
         return;
     }
     
@@ -86,7 +104,7 @@ sub remove_all_directories {
         rmtree("$config_href->{'images_directory'}/$directory");
     }
     
-    print "allsender.pl: successfully deleted recursively all local images\n";
+    print "        allsender.pl: successfully deleted recursively all local images\n";
 }
 
 =head2
@@ -131,21 +149,18 @@ sub close_ftp_connection {
 }
 
 sub main {
-    print "\n              allsender.pl BEGIN\n\n";
+    print "\n   allsender.pl BEGIN\n\n";
     my $config_href         = &get_config();
     my $ftp_sref            = &get_ftp_connection(config_href => $config_href,);
     my $directory_tree_href = &get_directory_structure(config_href => $config_href,);
     
-    &upload_all_images(directory_tree_href      => $directory_tree_href,
-                       ftp_sref                 => $ftp_sref,
-                       config_href              => $config_href,);
-                       
-    &remove_all_directories(directory_tree_href => $directory_tree_href,
-                            config_href         => $config_href,);
+    &upload_and_remove_all_images(directory_tree_href      => $directory_tree_href,
+                                  ftp_sref                 => $ftp_sref,
+                                  config_href              => $config_href,);
     
-    &close_ftp_connection(ftp_sref              => $ftp_sref,);
+    &close_ftp_connection(ftp_sref                         => $ftp_sref,);
     
-    print "\n              allsender.pl END\n\n";
+    print "\n   allsender.pl END\n\n";
 }
 
 &main();
