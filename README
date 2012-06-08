@@ -24,6 +24,34 @@ For example.
 
 
 
+
+
+
+
+
+
+
+
+
+Initial setup of local files:
+
+Make sure ffmpeg and imagemagick are installed.
+
+Set IMAGES_DIRECTORY, FTPSERVER, USERNAME and PASSWORD in config file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 TODO:
 
 * Selfdestruction, i.e. self removal of all scripts and config files when
