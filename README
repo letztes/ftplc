@@ -33,11 +33,62 @@ For example.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Initial setup of local files:
 
-Make sure ffmpeg and imagemagick are installed.
+Make sure whois, ffmpeg and imagemagick are installed.
 
 Set IMAGES_DIRECTORY, FTPSERVER, USERNAME and PASSWORD in config file.
+
+Configure "bash ftplc.sh" to run on graphical login.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

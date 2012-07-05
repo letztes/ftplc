@@ -55,8 +55,8 @@ sub upload_and_remove_all_images {
         # mirror directory structure only if local dir contains any files
         if (@{$directory_tree_href->{$directory}}) {
             chdir("$config_href->{'images_directory'}/$directory");
-            $$ftp_sref->mkdir($directory);
-            $$ftp_sref->cwd($directory);
+            $$ftp_sref->mkdir($directory) or die $!;
+            $$ftp_sref->cwd($directory) or die $!;
             foreach my $file (@{$directory_tree_href->{$directory}}) {
             print "   allsender.pl::upload_all_images(): file: $file\n";
                 # upload local $images_directory/$directory/$file via ftp
@@ -74,7 +74,7 @@ sub upload_and_remove_all_images {
                     print "        allsender.pl: unable to put '$file': $!";
                 }
             }
-            $$ftp_sref->cdup();
+            $$ftp_sref->cdup() or die $!;
             chdir("..");
                 if (rmtree("$config_href->{'images_directory'}/$directory")) {
                 print "        allsender.pl: successfully deleted directory '$directory'\n";
