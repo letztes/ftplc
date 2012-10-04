@@ -19,8 +19,8 @@
             }
         </script>
     </head>
-    <body bgcolor="#ddffdd">
-    <h1>Ungesichtetes Material</h1>
+    <body bgcolor="#ddddff">
+    <h1>Gesicherte Bilder</h1>
     
     <!-- Linklist -->
     <div style="float:left">
@@ -55,9 +55,7 @@
                 <a href="?timestamp=[% next_timestamp %]"><input value="[% next_timestamp %]" type="button"></a>
             [% ELSE %]
                 nothing
-            [% END %]
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <a href="?save=[% timestamp %]&timestamp=[% timestamp %]"><input value="Diese Seite sichern" type="button"></a>
+            [% END %]          
             
             <hr/>
             <table>
