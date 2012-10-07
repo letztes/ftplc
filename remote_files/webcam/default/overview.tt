@@ -29,7 +29,7 @@
                 <input type="checkbox" name="masterbox" onclick="checkAll()" value="">Alle ausw&auml;hlen<br />
                 [% FOREACH current_timestamp IN timestamps %]
                     <input type="checkbox" name="timestamps_to_delete" value="[% current_timestamp %]">
-                    <a href="?timestamp=[% images_directory %][% current_timestamp %]&archive=[% archive %]">[% current_timestamp %]</a><br/>
+                    <a href="?timestamp=[% current_timestamp %]&archive=[% archive %]">[% current_timestamp %]</a><br/>
                 [% END %]
                 <input type="hidden" name="delete" value="yes" />
                 [% IF timestamp %]
@@ -73,12 +73,12 @@
                 <tr>
                     <td>
                         [% IF webcam %]
-                            <a href="./[% webcam %]"><img src="./[% webcam %]" height="480" /></a>
+                            <a href="[% images_directory %][% webcam %]"><img src="[% images_directory %][% webcam %]" height="480" /></a>
                         [% END %]
                     </td>
                     <td>
                         [% IF screenshot %]
-                            <a href="./[% screenshot %]"><img src="./[% screenshot %]" height="480" /></a>
+                            <a href="[% images_directory %][% screenshot %]"><img src="[% images_directory %][% screenshot %]" height="480" /></a>
                         [% END %]
                     </td>
                 </tr>
