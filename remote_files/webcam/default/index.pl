@@ -12,7 +12,7 @@ use CGI::Carp 'fatalsToBrowser';
 my $cgi = CGI->new;
 print $cgi->header('text/html');
 
-my $images_directory = '.';
+my $images_directory = './';
 
 my $file = 'overview.tt';
 my $vars = {};
@@ -78,8 +78,8 @@ sub get_current_page_number {
 
 sub main {
     
-    delete_files() if $cgi->param('delete');
     save_file() if $cgi->param('save');
+    delete_files() if $cgi->param('delete');
     
     my @timestamps = get_timestamps();
     
