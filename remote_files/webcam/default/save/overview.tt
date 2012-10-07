@@ -4,30 +4,30 @@
         <script type = "text/javascript">
             function checkAll() {
                 if(document.forms[0].masterbox.checked==true){
-                    last_index = document.forms[0].elements["timestamps_to_delete[]"].length;
+                    last_index = document.forms[0].elements["timestamps_to_delete"].length;
                     if (last_index > 20) {last_index = 20;}
                     for(var i=0; i< last_index; i++) {
-                        document.forms[0].elements["timestamps_to_delete[]"][i].checked=true;
+                        document.forms[0].elements["timestamps_to_delete"][i].checked=true;
                         
                     }
                 }
                 else {
-                    for(var i=0; i< document.forms[0].elements["timestamps_to_delete[]"].length; i++) {
-                        document.forms[0].elements["timestamps_to_delete[]"][i].checked=false;
+                    for(var i=0; i< document.forms[0].elements["timestamps_to_delete"].length; i++) {
+                        document.forms[0].elements["timestamps_to_delete"][i].checked=false;
                     }
                 }
             }
         </script>
     </head>
     <body bgcolor="#ddddff">
-    <h1>Gesicherte Bilder</h1>
+    <h1>Ungesichtetes Material</h1>
     
     <!-- Linklist -->
     <div style="float:left">
         <form action="index.pl" method="get">
             <input type="checkbox" name="masterbox" onclick="checkAll()" value="">Alle ausw&auml;hlen<br />
             [% FOREACH current_timestamp IN timestamps %]
-                <input type="checkbox" name="timestamps_to_delete" value="[% timestamp %]">
+                <input type="checkbox" name="timestamps_to_delete" value="[% current_timestamp %]">
                 <a href="?timestamp=[% current_timestamp %]">[% current_timestamp %]</a><br/>
             [% END %]
             <input type="hidden" name="delete" value="yes" />
@@ -43,7 +43,7 @@
     
     [% IF timestamp %]
         <!-- Back button, forward button, save button, the two images -->
-        <div style="border:3px black dotted; float:left">                <p>timestamp: [% timestamp %]</p>
+        <div style="border:3px black dotted; float:left">
             Seite [% current_page_number %] von [% total_pages_amount %] <br/>
             [% IF previous_timestamp %]
                 <a href="?timestamp=[% previous_timestamp %]"><input value="[% previous_timestamp %]" type="button"></a>
@@ -55,7 +55,7 @@
                 <a href="?timestamp=[% next_timestamp %]"><input value="[% next_timestamp %]" type="button"></a>
             [% ELSE %]
                 nothing
-            [% END %]          
+            [% END %]
             
             <hr/>
             <table>

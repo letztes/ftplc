@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 use Data::Dumper;
-use File::Copy;
 use Template;
 
 use CGI;
@@ -12,7 +11,7 @@ use CGI::Carp 'fatalsToBrowser';
 my $cgi = CGI->new;
 print $cgi->header('text/html');
 
-my $images_directory = '.';
+my $images_directory = './';
 
 my $file = 'overview.tt';
 my $vars = {};
@@ -58,14 +57,6 @@ sub delete_files {
     return;
 }
 
-sub save_file {
-    
-    copy($cgi->param('save') . '_screenshot.jpg', 'save/');
-    copy($cgi->param('save') . '_webcam.jpg', 'save/');
-    
-    return;
-}
-
 sub get_current_page_number {
     my ($arg_href) = @_;
     my $i = 1;
@@ -79,7 +70,6 @@ sub get_current_page_number {
 sub main {
     
     delete_files() if $cgi->param('delete');
-    save_file() if $cgi->param('save');
     
     my @timestamps = get_timestamps();
     
