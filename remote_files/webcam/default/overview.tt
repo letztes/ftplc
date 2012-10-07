@@ -19,8 +19,8 @@
             }
         </script>
     </head>
-    <body bgcolor="#ddffdd">
-    <h1>Ungesichtetes Material</h1>
+    <body bgcolor="[% background_color %]">
+    <h1>[% h1 %]</h1>
     
     <!-- Linklist -->
     <div style="float:left">
@@ -28,11 +28,14 @@
             <input type="checkbox" name="masterbox" onclick="checkAll()" value="">Alle ausw&auml;hlen<br />
             [% FOREACH current_timestamp IN timestamps %]
                 <input type="checkbox" name="timestamps_to_delete" value="[% current_timestamp %]">
-                <a href="?timestamp=[% current_timestamp %]">[% current_timestamp %]</a><br/>
+                <a href="?timestamp=[% images_directory %][% current_timestamp %]&archive=[% archive %]">[% current_timestamp %]</a><br/>
             [% END %]
             <input type="hidden" name="delete" value="yes" />
             [% IF timestamp %]
                 <input type="hidden" name="timestamp" value="[% timestamp %]" />
+            [% END %]
+            [% IF archive %]
+                <input type="hidden" name="archive" value="1" />
             [% END %]
             <input value="Alle Bilder l&ouml;schen" type="submit" onClick="return confirm(\'Wirklich die gew&auml;hlten Bilder l&ouml;schen?\');" /><br/>
         </form>

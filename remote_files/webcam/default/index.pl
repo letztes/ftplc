@@ -13,9 +13,13 @@ my $cgi = CGI->new;
 print $cgi->header('text/html');
 
 my $images_directory = './';
+$images_directory = './archive/' if $cgi->param('archive');
 
 my $file = 'overview.tt';
 my $vars = {};
+$vars->{'background_color'} = '#ddffdd';
+$vars->{'h1'} = 'Ungesichtetes Material';
+$vars->{'images_directory'} = $images_directory;
 
 my $template = Template->new();
 
@@ -60,8 +64,8 @@ sub delete_files {
 
 sub save_file {
     
-    copy($cgi->param('save') . '_screenshot.jpg', 'save/');
-    copy($cgi->param('save') . '_webcam.jpg', 'save/');
+    copy($cgi->param('save') . '_screenshot.jpg', 'archive/');
+    copy($cgi->param('save') . '_webcam.jpg', 'archive/');
     
     return;
 }
@@ -80,6 +84,12 @@ sub main {
     
     save_file() if $cgi->param('save');
     delete_files() if $cgi->param('delete');
+    
+    if ($cgi->param('archive')) {
+        $vars->{'background_color'} = '#ddddff';
+        $vars->{'h1'} = 'Gesichertes Material';
+        $vars->{'archive'} = '1';
+    }
     
     my @timestamps = get_timestamps();
     
