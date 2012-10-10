@@ -51,13 +51,13 @@
         <div style="border:3px black dotted; float:left">
             Seite [% current_page_number %] von [% total_pages_amount %] <br/>
             [% IF previous_timestamp %]
-                <a href="?archive=[% archive %]&timestamp=[% previous_timestamp %]"><input value="[% previous_timestamp %]" type="button"></a>
+                <a href="?timestamp=[% previous_timestamp %]&archive=[% archive %]"><input value="[% previous_timestamp %]" type="button"></a>
             [% ELSE %]
                 &emsp;&emsp;&emsp;&emsp;&emsp;nothing
             [% END %]
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             [% IF next_timestamp %]
-                <a href="?archive=[% archive %]&timestamp=[% next_timestamp %]"><input value="[% next_timestamp %]" type="button"></a>
+                <a href="?timestamp=[% next_timestamp %]&archive=[% archive %]"><input value="[% next_timestamp %]" type="button"></a>
             [% ELSE %]
                 nothing
             [% END %]
