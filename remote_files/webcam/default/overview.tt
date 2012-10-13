@@ -3,16 +3,26 @@
         <title>untitled document</title>
         <script type = "text/javascript">
             function checkAll() {
+                var last_index = document.forms[0].elements["timestamps_to_delete"].length;
                 if(document.forms[0].masterbox.checked==true){
-                    last_index = document.forms[0].elements["timestamps_to_delete"].length;
+                    if (last_index == undefined)
+                    {
+                        document.forms[0].elements["timestamps_to_delete"].checked=true;
+                        return;
+                    }
                     if (last_index > 20) {last_index = 20;}
-                    for(var i=0; i< last_index; i++) {
+                    for(var i=0; i < last_index; i++) {
                         document.forms[0].elements["timestamps_to_delete"][i].checked=true;
                         
                     }
                 }
                 else {
-                    for(var i=0; i< document.forms[0].elements["timestamps_to_delete"].length; i++) {
+                    if (last_index == undefined)
+                    {
+                        document.forms[0].elements["timestamps_to_delete"].checked=false;
+                        return;
+                    }
+                    for(var i=0; i< last_index; i++) {
                         document.forms[0].elements["timestamps_to_delete"][i].checked=false;
                     }
                 }
@@ -38,7 +48,7 @@
                 [% IF archive %]
                     <input type="hidden" name="archive" value="1" />
                 [% END %]
-                <input value="Alle Bilder l&ouml;schen" type="submit" onClick="return confirm(\'Wirklich die gew&auml;hlten Bilder l&ouml;schen?\');" /><br/>
+                <input value="Alle Bilder l&ouml;schen" type="submit" onclick="return confirm('Wirklich die gew&auml;hlten Bilder l&ouml;schen?')"/><br/>
             [% END %]
         </form>
     </div>
