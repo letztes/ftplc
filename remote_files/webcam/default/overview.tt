@@ -29,12 +29,12 @@
             }
         </script>
     </head>
-    <body bgcolor="[% background_color %]">
+    <body bgcolor="[% background_color %]" onload="document.forms[0].nextButton.focus()">
     <h1>[% h1 %]</h1>
-    
-    <!-- Linklist -->
-    <div style="float:left">
-        <form action="index.pl" method="get">
+
+    <form action="index.pl" method="get">
+        <!-- Linklist -->
+        <div style="float:left">
             [% IF timestamps %]
                 <input type="checkbox" name="masterbox" onclick="checkAll()" value="">Alle ausw&auml;hlen<br />
                 [% FOREACH current_timestamp IN timestamps %]
@@ -50,51 +50,51 @@
                 [% END %]
                 <input value="Alle Bilder l&ouml;schen" type="submit" onclick="return confirm('Wirklich die gew&auml;hlten Bilder l&ouml;schen?')"/><br/>
             [% END %]
-        </form>
-    </div>
-    
-    
-    
-    
-    [% IF timestamp AND timestamps %]
-        <!-- Back button, forward button, save button, the two images -->
-        <div style="border:3px black dotted; float:left">
-            Seite [% current_page_number %] von [% total_pages_amount %] <br/>
-            [% IF previous_timestamp %]
-                <a href="?timestamp=[% previous_timestamp %]&archive=[% archive %]"><input value="[% previous_timestamp %]" type="button"></a>
-            [% ELSE %]
-                &emsp;&emsp;&emsp;&emsp;&emsp;nothing
-            [% END %]
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            [% IF next_timestamp %]
-                <a href="?timestamp=[% next_timestamp %]&archive=[% archive %]"><input value="[% next_timestamp %]" type="button"></a>
-            [% ELSE %]
-                nothing
-            [% END %]
-            [% IF NOT archive %]
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <a href="?save=[% timestamp %]&timestamp=[% timestamp %]"><input value="Diese Seite sichern" type="button"></a>
-            [% END %]
-            
-            <hr/>
-            <table>
-                <th>Webcam</th>
-                <th>Screenshot</th>
-                <tr>
-                    <td>
-                        [% IF webcam %]
-                            <a href="[% images_directory %][% webcam %]"><img src="[% images_directory %][% webcam %]" height="480" /></a>
-                        [% END %]
-                    </td>
-                    <td>
-                        [% IF screenshot %]
-                            <a href="[% images_directory %][% screenshot %]"><img src="[% images_directory %][% screenshot %]" height="480" /></a>
-                        [% END %]
-                    </td>
-                </tr>
-            </table>
         </div>
-    [% END %]
+    
+    
+    
+    
+        [% IF timestamp AND timestamps %]
+            <!-- Back button, forward button, save button, the two images -->
+            <div style="border:3px black dotted; float:left">
+                Seite [% current_page_number %] von [% total_pages_amount %] <br/>
+                [% IF previous_timestamp %]
+                    <a href="?timestamp=[% previous_timestamp %]&archive=[% archive %]"><input value="[% previous_timestamp %]" type="button"></a>
+                [% ELSE %]
+                    &emsp;&emsp;&emsp;&emsp;&emsp;nothing
+                [% END %]
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                [% IF next_timestamp %]
+                    <a href="?timestamp=[% next_timestamp %]&archive=[% archive %]"><input id="nextButton" value="[% next_timestamp %]" type="button"></a>
+                [% ELSE %]
+                    nothing
+                [% END %]
+                [% IF NOT archive %]
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a href="?save=[% timestamp %]&timestamp=[% timestamp %]"><input value="Diese Seite sichern" type="button"></a>
+                [% END %]
+                
+                <hr/>
+                <table>
+                    <th>Webcam</th>
+                    <th>Screenshot</th>
+                    <tr>
+                        <td>
+                            [% IF webcam %]
+                                <a href="[% images_directory %][% webcam %]"><img src="[% images_directory %][% webcam %]" height="480" /></a>
+                            [% END %]
+                        </td>
+                        <td>
+                            [% IF screenshot %]
+                                <a href="[% images_directory %][% screenshot %]"><img src="[% images_directory %][% screenshot %]" height="480" /></a>
+                            [% END %]
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        [% END %]
+    </form>
     
     </body>
 </html>
