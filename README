@@ -65,7 +65,7 @@ For example.
 
 Initial setup of local files:
 
-Make sure whois, ffmpeg and imagemagick are installed.
+Make sure whois, libav-tools and imagemagick are installed.
 
 Set IMAGES_DIRECTORY, FTPSERVER, USERNAME and PASSWORD in config file.
 

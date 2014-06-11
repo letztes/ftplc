@@ -15,9 +15,9 @@ use Net::FTP;
 
 =head2
     Returns a hashref.
-    $directory_tree_href->{/any/dir}->{<timestamp>} = [qw(<img.jpg> <img.jpg>)]
-                               ^             ^                ^          ^
-                          directory      directory           file       etc. 
+    $directory_tree_href->{<timestamp>} = [qw(<img.jpg> <img.jpg>)]
+                              ^                ^          ^
+                          directory           file       etc.
 =cut
 sub get_directory_structure {
     my %args                = @_;
@@ -55,33 +55,33 @@ sub upload_and_remove_all_images {
         # mirror directory structure only if local dir contains any files
         if (@{$directory_tree_href->{$directory}}) {
             chdir("$config_href->{'images_directory'}/$directory");
-            $$ftp_sref->mkdir($directory) or die $!;
-            $$ftp_sref->cwd($directory) or die $!;
+            $$ftp_sref->mkdir($directory) or die 'unable to ftp mkdir';
+            $$ftp_sref->cwd($directory) or die 'unable to ftp cwd';
             foreach my $file (@{$directory_tree_href->{$directory}}) {
             print "   allsender.pl::upload_all_images(): file: $file\n";
                 # upload local $images_directory/$directory/$file via ftp
-#                $$ftp_sref->put($file) || warn "didn't work to put $file: $!";
+#                $$ftp_sref->put($file) || warn "didn't work to put $file";
                 if ($$ftp_sref->put($file)) {
                     print "        allsender.pl: successfully uploaded '$file'\n";
                     if (unlink("$config_href->{'images_directory'}/$directory/$file")) {
                         print "        allsender.pl: successfully deleted '$file'\n";
                     }
                     else {
-                        print "        allsender.pl: unable to delete '$file'\n";
+                        print "        allsender.pl: unable to delete '$file' $!\n";
                     }
                 }
                 else {
-                    print "        allsender.pl: unable to put '$file': $!";
+                    print "        allsender.pl: unable to ftp put '$file'";
                 }
             }
-            $$ftp_sref->cdup() or die $!;
+            $$ftp_sref->cdup() or die 'unable to ftp cdup';
             chdir("..");
                 if (rmtree("$config_href->{'images_directory'}/$directory")) {
                 print "        allsender.pl: successfully deleted directory '$directory'\n";
                 print "\n";
             }
             else {
-                print "        allsender.pl: unable to delete directory '$directory'\n";
+                print "        allsender.pl: unable to delete directory '$directory': $!\n";
             }
         }
     }
@@ -134,7 +134,7 @@ sub get_ftp_connection {
     my %args        = @_;
     my $config_href = $args{'config_href'};
     
-    my $ftp = Net::FTP->new($config_href->{'ftpserver'}) or die $!;
+    my $ftp = Net::FTP->new($config_href->{'ftpserver'}) or die 'unable to construct net ftp object';
     $ftp->login($config_href->{'username'}, $config_href->{'password'});
     $ftp->binary;
     
