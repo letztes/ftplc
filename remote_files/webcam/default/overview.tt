@@ -27,6 +27,34 @@
                     }
                 }
             }
+            
+            document.onkeydown = function(e) {
+                e = e || window.event;
+                switch(e.which || e.keyCode) {
+                    case 37: // left
+                        [% IF previous_timestamp %]
+                            window.location.href = '?timestamp=[% previous_timestamp %]&archive=[% archive %]';
+                        [% END %]
+                    break;
+
+                    //case 38: // up
+                    //break;
+
+                    case 39: // right
+                        [% IF next_timestamp %]
+                            window.location.href = '?timestamp=[% next_timestamp %]&archive=[% archive %]';
+                        [% END %]
+                    break;
+
+                    //case 40: // down
+                    //break;
+
+                    default: return; // exit this handler for other keys
+                }
+                e.preventDefault(); // prevent the default action (scroll / move caret)
+            }
+                        
+            
         </script>
     </head>
     <body bgcolor="[% background_color %]" onload="document.forms[0].nextButton.focus()">
