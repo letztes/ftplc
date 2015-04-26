@@ -70,7 +70,7 @@ while true; do
     ########################################################################
 
     echo "   taking screenshot image..."
-    import -display $(echo $DISPLAY).0 -window root /tmp/screenshot.jpg
+    import -display $DISPLAY.0 -window root /tmp/screenshot.jpg
     # import cannot use variables as file arguments
     mv /tmp/screenshot.jpg $SCREENSHOT_FILENAME
     if [ -e $SCREENSHOT_FILENAME ]; then
